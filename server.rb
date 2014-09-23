@@ -1,13 +1,65 @@
 require 'sinatra'
+require 'digest'
+require 'mongo_mapper'
+require 'rack/contrib'
+
+class Person
+    include MongoMapper::Document
+
+    key :fname, String, required: true
+    key :lname, String, required: true
+    key :username, String, unique: true, required: true
+    key :email, String, required: true
+    key :password, String, required: true
+    
+end
+
+configure do
+  MongoMapper.database = 'exploration2'
+  I18n.config.enforce_available_locales = false
+end
 
 get '/' do
 	erb :index, :layout => true
 end
 
-get '/rickroll' do
-	erb :rick, :layout => true
+get '/new' do
+	erb :new, { :layout => true }
+end
+
+get '/users' do
+	@person = Person.all
+
+	erb :list, :layout => true, :locals => { user: @person }
+end
+
+get '/users/:id' do
+  @person = Person.where( :username => params[:id] )
+  erb :user, layout: true, locals: { user: @person}
+end
+
+delete '/users' do
+  Person.destroy_all
+end
+
+post '/users' do
+  test_hash = Digest::MD5.digest 'password'
+  Kernel.puts test_hash
+  person = Person.new(fname: params[:fname], lname: params[:lname], username: params[:username], email: params[:email], password: password_hash)
+  if person.save
+    redirect to('/users')
+  else
+    redirect to('/new')
+  end
+  
 end
 
 get '/posts/:id' do
 	"You are reading post #{params[:id]}"
 end
+
+
+
+
+
+

@@ -1,0 +1,28 @@
+<form action="/users" method="POST" data-abide>
+	<label for="fname">
+		First Name
+		<input type="text" name="fname" id="fname" required>
+	</label>
+	<label for="lname">
+		Last Name
+		<input type="text" name="lname" id="lname" required> 
+	</label>
+	<label for="username">
+		Username
+		<input type="text" name="username" id="username" required>
+	</label>
+	<label for="email">
+		Email
+		<input type="email" name="email" id="email" required>
+		<small class="error">Please follow the format: example@example.com</small>
+	</label>
+	<label for="password">
+		Password
+		<input type="password" name="password" id="password" required>
+	</label>
+	<label for="confirmation">
+		Password Confirmation
+		<input type="password" name="confirmation" id="confirmation" data-equalto="password">
+		<small class="error">Password doesn't match</small>
+	<input type="submit" value="Sign up" class="button radius round success">
+</form>
