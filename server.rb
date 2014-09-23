@@ -43,8 +43,7 @@ delete '/users' do
 end
 
 post '/users' do
-  test_hash = Digest::MD5.digest 'password'
-  Kernel.puts test_hash
+  password_hash = Digest::SHA256.hexdigest params[:password]
   person = Person.new(fname: params[:fname], lname: params[:lname], username: params[:username], email: params[:email], password: password_hash)
   if person.save
     redirect to('/users')
