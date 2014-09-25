@@ -4,13 +4,13 @@ require 'mongo_mapper'
 require 'rack/contrib'
 
 class Person
-    include MongoMapper::Document
+  include MongoMapper::Document
 
-    key :fname, String, required: true
-    key :lname, String, required: true
-    key :username, String, unique: true, required: true
-    key :email, String, required: true
-    key :password, String, required: true
+  key :fname, String, required: true
+  key :lname, String, required: true
+  key :username, String, unique: true, required: true
+  key :email, String, required: true
+  key :password, String, required: true
     
 end
 
@@ -29,7 +29,6 @@ end
 
 get '/users' do
 	@person = Person.all
-
 	erb :list, :layout => true, :locals => { user: @person }
 end
 
@@ -38,8 +37,12 @@ get '/users/:id' do
   erb :user, layout: true, locals: { user: @person}
 end
 
-delete '/users' do
-  Person.destroy_all
+get '/users/:id/delete' do
+  if Person.destroy_all( :username => params[:id] )
+    redirect to('/users') 
+  else
+    redirect('/users/:id')
+  end
 end
 
 post '/users' do
@@ -48,13 +51,8 @@ post '/users' do
   if person.save
     redirect to('/users')
   else
-    redirect to('/new')
+    redirect to('/new'), "User couldn't be created"
   end
-  
-end
-
-get '/posts/:id' do
-	"You are reading post #{params[:id]}"
 end
 
 
