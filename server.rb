@@ -33,7 +33,21 @@ end
 
 post '/login' do
   @person = Person.where(username: params[:username])
-  Kernel.puts @person.class
+  input_pw = params[:password]
+
+  Kernel.puts input_pw
+
+  if input_pw.is_a? String
+    inputted_password_hash = Digest::SHA256.hexdigest input_pw  
+  else
+    redirect back
+  end
+  
+  if @person.first['password'].eql?(inputted_password_hash)
+    redirect to('/users/' + @person.first['username'])
+  else
+    redirect to('/login'), 'Invalid username or password'
+  end
 end
 
 get '/users' do
