@@ -20,22 +20,20 @@ configure do
 end
 
 get '/' do
-	erb :index, :layout => true
+	erb :index, :layout => true, locals: { title: 'Home'}
 end
 
 get '/new' do
-	erb :new, { :layout => true }
+	erb :new, :layout => true, locals: { title: 'Sign Up'}
 end
 
 get '/login' do
-  erb :login, { :layout => true }
+  erb :login, locals: { title: 'Login'}, :layout => true 
 end
 
 post '/login' do
   @person = Person.where(username: params[:username])
   input_pw = params[:password]
-
-  Kernel.puts input_pw
 
   if input_pw.is_a? String
     inputted_password_hash = Digest::SHA256.hexdigest input_pw  
@@ -52,7 +50,7 @@ end
 
 get '/users' do
 	@person = Person.all
-	erb :list, :layout => true, :locals => { user: @person }
+	erb :list, :layout => true, :locals => { user: @person, title: 'Users' }
 end
 
 get '/users/:id' do
@@ -77,9 +75,6 @@ post '/users' do
     redirect to('/new'), "User couldn't be created"
   end
 end
-
-
-
 
 
 
