@@ -27,6 +27,15 @@ get '/new' do
 	erb :new, { :layout => true }
 end
 
+get '/login' do
+  erb :login, { :layout => true }
+end
+
+post '/login' do
+  @person = Person.where(username: params[:username])
+  Kernel.puts @person.class
+end
+
 get '/users' do
 	@person = Person.all
 	erb :list, :layout => true, :locals => { user: @person }
