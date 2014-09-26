@@ -55,7 +55,7 @@ end
 
 get '/users/:id' do
   @person = Person.where( :username => params[:id] )
-  erb :user, layout: true, locals: { user: @person}
+  erb :user, layout: true, locals: { user: @person, title: 'Profile'}
 end
 
 get '/users/:id/delete' do
